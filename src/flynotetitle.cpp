@@ -44,6 +44,7 @@ FlyNoteTitle::~FlyNoteTitle()
     delete btnNew;
     delete btnClose;
     delete btnColor;
+    delete editTitle;
     delete hLayout;
 }
 
