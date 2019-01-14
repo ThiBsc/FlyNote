@@ -155,6 +155,7 @@ void FlyNoteButton::initColor()
     QRect r = rect();
     /* Normal */
     painter.begin(pixNormal);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(color));
     painter.setBrush(QBrush(color));
     painter.drawEllipse(r);
@@ -162,6 +163,7 @@ void FlyNoteButton::initColor()
     /* End normal */
     /* Hovered */
     painter.begin(pixHovered);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(color.darker(105)));
     painter.setBrush(QBrush(color.darker(105)));
     painter.drawEllipse(r);
@@ -169,6 +171,7 @@ void FlyNoteButton::initColor()
     /* End hovered */
     /* Normal */
     painter.begin(pixClicked);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(color.darker(110)));
     painter.setBrush(QBrush(color.darker(110)));
     painter.drawEllipse(r);
