@@ -1,0 +1,3 @@
+language: cpp
+before_install: sudo apt-get install qt5-default
+script: mkdir build && cd build && qmake ../flynote.pro && make
