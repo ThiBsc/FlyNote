@@ -10,6 +10,7 @@ QVector<QColor> FlyNote::colorNotes =
     QColor("pink"),
     QColor("sandybrown"),
     QColor("lightsteelblue"),
+    QColor(255, 255, 102), // yellow
 };
 
 FlyNote::FlyNote(const QString &title, const QString &text)
