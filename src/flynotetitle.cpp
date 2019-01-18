@@ -1,6 +1,7 @@
 #include "flynotetitle.h"
 #include "flynote.h"
 #include "flynotebutton.h"
+#include "pickercolor.h"
 
 #include <QMouseEvent>
 
@@ -52,14 +53,14 @@ void FlyNoteTitle::openNewNote()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> dis(1, FlyNote::colorNotes.size());
-    FlyNote *f = new FlyNote(FlyNote::colorNotes.at(dis(gen)-1), "New note", "");
+    std::uniform_int_distribution<> dis(1, PickerColor::colorNotes.size());
+    FlyNote *f = new FlyNote(PickerColor::colorNotes.at(dis(gen)-1), "New note", "");
     f->show();
 }
 
 void FlyNoteTitle::openColor()
 {
-
+    emit wantPickerColor();
 }
 
 void FlyNoteTitle::titleChanged()

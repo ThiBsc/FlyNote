@@ -16,6 +16,7 @@ public:
     ~FlyNoteTitle() override;
 
 signals:
+    void wantPickerColor();
 
 public slots:
     void openNewNote();

@@ -1,17 +1,8 @@
 #include "flynote.h"
 #include "flynotetitle.h"
+#include "pickercolor.h"
 
 #include <QPainter>
-
-QVector<QColor> FlyNote::colorNotes =
-{
-    QColor("lightblue"),
-    QColor("lightgreen"),
-    QColor("pink"),
-    QColor("sandybrown"),
-    QColor("lightsteelblue"),
-    QColor(255, 255, 102), // yellow
-};
 
 FlyNote::FlyNote(const QString &title, const QString &text)
     : QWidget (nullptr)
@@ -20,6 +11,8 @@ FlyNote::FlyNote(const QString &title, const QString &text)
     , color(QColor("lightblue"))
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
+    , pickerColor(new PickerColor(this))
+    , pickerAnimation(new QPropertyAnimation(pickerColor, "minimumHeight", this))
 {
     init();
 }
@@ -31,6 +24,8 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
     , color(color)
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
+    , pickerColor(new PickerColor(this))
+    , pickerAnimation(new QPropertyAnimation(pickerColor, "minimumHeight", this))
 {
     init();
 }
@@ -39,12 +34,26 @@ FlyNote::~FlyNote()
 {
     delete flynoteTitle;
     delete editText;
+    delete pickerAnimation;
+    delete pickerColor;
     delete vLayout;
 }
 
 QColor FlyNote::getColor() const
 {
     return color;
+}
+
+void FlyNote::displayPickerColor()
+{
+    pickerAnimation->start();
+}
+
+void FlyNote::invertAnimationSettings()
+{
+    QVariant tmp = pickerAnimation->startValue();
+    pickerAnimation->setStartValue(pickerAnimation->endValue());
+    pickerAnimation->setEndValue(tmp);
 }
 
 void FlyNote::paintEvent(QPaintEvent *evt)
@@ -79,9 +88,17 @@ void FlyNote::init()
 
     vLayout->setContentsMargins(5,5,5,5);
     vLayout->addWidget(flynoteTitle);
+    vLayout->addWidget(pickerColor);
     vLayout->addWidget(editText, 1);
     setLayout(vLayout);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+    // Animation settings
+    pickerAnimation->setDuration(500);
+    pickerAnimation->setStartValue(0);
+    pickerAnimation->setEndValue(75);
+    connect(flynoteTitle, SIGNAL(wantPickerColor()), this, SLOT(displayPickerColor()));
+    connect(pickerAnimation, SIGNAL(finished()), this, SLOT(invertAnimationSettings()));
 
     resize(256, 256);
 }

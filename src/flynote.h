@@ -5,8 +5,10 @@
 #include <QVBoxLayout>
 #include <QSizeGrip>
 #include <QTextEdit>
+#include <QPropertyAnimation>
 
 class FlyNoteTitle;
+class PickerColor;
 
 class FlyNote : public QWidget
 {
@@ -16,11 +18,12 @@ public:
     explicit FlyNote(const QColor& color, const QString& title, const QString& text);
     ~FlyNote() override;
     QColor getColor() const;
-    static QVector<QColor> colorNotes;
 
 signals:
 
 public slots:
+    void displayPickerColor();
+    void invertAnimationSettings();
 
 protected:
     void paintEvent(QPaintEvent *evt) override;
@@ -33,6 +36,8 @@ private:
     QColor color;
     QSizeGrip sizeGrip;
     FlyNoteTitle *flynoteTitle;
+    PickerColor *pickerColor;
+    QPropertyAnimation *pickerAnimation;
 
 };
 
