@@ -1,6 +1,6 @@
 #include "flynote.h"
 #include "flynotetitle.h"
-#include "pickercolor.h"
+#include "colorpicker.h"
 
 #include <QPainter>
 
@@ -11,8 +11,8 @@ FlyNote::FlyNote(const QString &title, const QString &text)
     , color(QColor("lightblue"))
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
-    , pickerColor(new PickerColor(this))
-    , pickerAnimation(new QPropertyAnimation(pickerColor, "minimumHeight", this))
+    , colorPicker(new ColorPicker(this))
+    , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
 {
     init();
 }
@@ -24,8 +24,8 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
     , color(color)
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
-    , pickerColor(new PickerColor(this))
-    , pickerAnimation(new QPropertyAnimation(pickerColor, "minimumHeight", this))
+    , colorPicker(new ColorPicker(this))
+    , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
 {
     init();
 }
@@ -35,7 +35,7 @@ FlyNote::~FlyNote()
     delete flynoteTitle;
     delete editText;
     delete pickerAnimation;
-    delete pickerColor;
+    delete colorPicker;
     delete vLayout;
 }
 
@@ -88,7 +88,7 @@ void FlyNote::init()
 
     vLayout->setContentsMargins(5,5,5,5);
     vLayout->addWidget(flynoteTitle);
-    vLayout->addWidget(pickerColor);
+    vLayout->addWidget(colorPicker);
     vLayout->addWidget(editText, 1);
     setLayout(vLayout);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);

@@ -8,7 +8,7 @@
 #include <QPropertyAnimation>
 
 class FlyNoteTitle;
-class PickerColor;
+class ColorPicker;
 
 class FlyNote : public QWidget
 {
@@ -36,7 +36,7 @@ private:
     QColor color;
     QSizeGrip sizeGrip;
     FlyNoteTitle *flynoteTitle;
-    PickerColor *pickerColor;
+    ColorPicker *colorPicker;
     QPropertyAnimation *pickerAnimation;
 
 };

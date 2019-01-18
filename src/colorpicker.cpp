@@ -1,8 +1,8 @@
-#include "pickercolor.h"
+#include "colorpicker.h"
 
 #include <QPainter>
 
-QVector<QColor> PickerColor::colorNotes =
+QVector<QColor> ColorPicker::colorNotes =
 {
     QColor("lightblue"),
     QColor("lightgreen"),
@@ -12,18 +12,18 @@ QVector<QColor> PickerColor::colorNotes =
     QColor(255, 255, 102), // yellow
 };
 
-PickerColor::PickerColor(QWidget *parent)
+ColorPicker::ColorPicker(QWidget *parent)
     : QWidget(parent)
 {
 
 }
 
-PickerColor::~PickerColor()
+ColorPicker::~ColorPicker()
 {
 
 }
 
-void PickerColor::paintEvent(QPaintEvent *evt)
+void ColorPicker::paintEvent(QPaintEvent *evt)
 {
     Q_UNUSED(evt);
 

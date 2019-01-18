@@ -30,14 +30,14 @@ SOURCES += \
     src/mainwindow.cpp \
     src/flynotetitle.cpp \
     src/flynotebutton.cpp \
-    src/pickercolor.cpp
+    src/colorpicker.cpp
 
 HEADERS += \
     src/flynote.h \
     src/mainwindow.h \
     src/flynotetitle.h \
     src/flynotebutton.h \
-    src/pickercolor.h
+    src/colorpicker.h
 
 FORMS += \
         mainwindow.ui
