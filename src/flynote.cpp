@@ -44,6 +44,13 @@ QColor FlyNote::getColor() const
     return color;
 }
 
+void FlyNote::setColor(const QColor &color)
+{
+    this->color = color;
+    flynoteTitle->updateButtons();
+    update();
+}
+
 void FlyNote::displayPickerColor()
 {
     pickerAnimation->start();

@@ -3,11 +3,13 @@
 
 #include <QWidget>
 
+class FlyNote;
+
 class ColorPicker : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ColorPicker(QWidget *parent = nullptr);
+    explicit ColorPicker(FlyNote *parent = nullptr);
     ~ColorPicker() override;
     static QVector<QColor> colorNotes;
 
@@ -16,7 +18,11 @@ signals:
 public slots:
 
 protected:
+    void mousePressEvent(QMouseEvent *evt) override;
     void paintEvent(QPaintEvent *evt) override;
+
+private:
+    FlyNote *parentFlynote;
 
 };
 

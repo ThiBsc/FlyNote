@@ -22,6 +22,11 @@ FlyNoteButton::~FlyNoteButton()
     delete pixClicked;
 }
 
+void FlyNoteButton::updateButtons()
+{
+    initPixmaps();
+}
+
 void FlyNoteButton::enterEvent(QEvent *evt)
 {
     Q_UNUSED(evt);

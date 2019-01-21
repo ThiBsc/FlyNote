@@ -14,6 +14,7 @@ class FlyNoteTitle : public QWidget
 public:
     explicit FlyNoteTitle(const QString& title, FlyNote *parent);
     ~FlyNoteTitle() override;
+    void updateButtons();
 
 signals:
     void wantPickerColor();

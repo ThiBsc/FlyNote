@@ -17,6 +17,7 @@ public:
     enum ButtonType { NEWNOTE=0, COLORNOTE, CLOSENOTE };
     FlyNoteButton(ButtonType type, FlyNote *parent);
     ~FlyNoteButton() override;
+    void updateButtons();
 
 protected:
     void enterEvent(QEvent *evt) override;

@@ -18,6 +18,7 @@ public:
     explicit FlyNote(const QColor& color, const QString& title, const QString& text);
     ~FlyNote() override;
     QColor getColor() const;
+    void setColor(const QColor& color);
 
 signals:
 

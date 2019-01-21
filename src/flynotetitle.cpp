@@ -49,6 +49,13 @@ FlyNoteTitle::~FlyNoteTitle()
     delete hLayout;
 }
 
+void FlyNoteTitle::updateButtons()
+{
+    btnNew->updateButtons();
+    btnClose->updateButtons();
+    btnColor->updateButtons();
+}
+
 void FlyNoteTitle::openNewNote()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
