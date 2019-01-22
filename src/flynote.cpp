@@ -145,12 +145,11 @@ void FlyNote::init()
     connect(flynoteTitle, SIGNAL(wantPickerColor()), this, SLOT(displayPickerColor()));
     connect(pickerAnimation, SIGNAL(finished()), this, SLOT(invertAnimationSettings()));
 
-    setWindowOpacity(10);
     setAttribute(Qt::WA_TranslucentBackground);
     //setAttribute(Qt::WA_NoSystemBackground);
     //setAttribute(Qt::WA_PaintOnScreen);
     //setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    //setFocusPolicy(Qt::FocusPolicy::ClickFocus);
     resize(256, 256);
 }
