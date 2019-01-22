@@ -3,6 +3,7 @@
 #include "colorpicker.h"
 
 #include <QPainter>
+#include <QEvent>
 
 FlyNote::FlyNote(const QString &title, const QString &text)
     : QWidget (nullptr)
@@ -13,6 +14,7 @@ FlyNote::FlyNote(const QString &title, const QString &text)
     , flynoteTitle(new FlyNoteTitle(title, this))
     , colorPicker(new ColorPicker(this))
     , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
+    , focusAlphaAnimation(new QPropertyAnimation(this, "alpha"))
 {
     init();
 }
@@ -26,6 +28,7 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
     , flynoteTitle(new FlyNoteTitle(title, this))
     , colorPicker(new ColorPicker(this))
     , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
+    , focusAlphaAnimation(new QPropertyAnimation(this, "alpha"))
 {
     init();
 }
@@ -34,6 +37,7 @@ FlyNote::~FlyNote()
 {
     delete flynoteTitle;
     delete editText;
+    delete focusAlphaAnimation;
     delete pickerAnimation;
     delete colorPicker;
     delete vLayout;
@@ -51,6 +55,17 @@ void FlyNote::setColor(const QColor &color)
     update();
 }
 
+int FlyNote::getAlpha() const
+{
+    return color.alpha();
+}
+
+void FlyNote::setAlpha(int alpha)
+{
+    color.setAlpha(alpha);
+    update();
+}
+
 void FlyNote::displayPickerColor()
 {
     pickerAnimation->start();
@@ -61,6 +76,27 @@ void FlyNote::invertAnimationSettings()
     QVariant tmp = pickerAnimation->startValue();
     pickerAnimation->setStartValue(pickerAnimation->endValue());
     pickerAnimation->setEndValue(tmp);
+}
+
+/** trick:
+ * https://stackoverflow.com/questions/14377141/in-qt-what-qevent-means-loses-window-focus-regain-window-focus-set-transpare
+ */
+void FlyNote::changeEvent(QEvent *evt)
+{
+    QWidget::changeEvent(evt);
+    if (evt->type() == QEvent::ActivationChange){
+        if(isActiveWindow()){
+            // widget is now active
+            focusAlphaAnimation->setStartValue(125);
+            focusAlphaAnimation->setEndValue(255);
+            focusAlphaAnimation->start();
+        } else {
+            // widget is now inactive
+            focusAlphaAnimation->setStartValue(255);
+            focusAlphaAnimation->setEndValue(125);
+            focusAlphaAnimation->start();
+        }
+    }
 }
 
 void FlyNote::paintEvent(QPaintEvent *evt)
@@ -81,6 +117,7 @@ void FlyNote::paintEvent(QPaintEvent *evt)
 void FlyNote::resizeEvent(QResizeEvent *evt)
 {
     Q_UNUSED(evt);
+    sizeGrip.resize(32, 32);
     sizeGrip.move(width()-sizeGrip.width(), height()-sizeGrip.height());
 }
 
@@ -104,8 +141,16 @@ void FlyNote::init()
     pickerAnimation->setDuration(500);
     pickerAnimation->setStartValue(0);
     pickerAnimation->setEndValue(75);
+    focusAlphaAnimation->setDuration(500);
     connect(flynoteTitle, SIGNAL(wantPickerColor()), this, SLOT(displayPickerColor()));
     connect(pickerAnimation, SIGNAL(finished()), this, SLOT(invertAnimationSettings()));
 
+    setWindowOpacity(10);
+    setAttribute(Qt::WA_TranslucentBackground);
+    //setAttribute(Qt::WA_NoSystemBackground);
+    //setAttribute(Qt::WA_PaintOnScreen);
+    //setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
     resize(256, 256);
 }
