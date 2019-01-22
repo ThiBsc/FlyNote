@@ -9,12 +9,13 @@ A program to take note on desktop like a Post-It
 ## Features
 
 * [X] Open a new flying note
-* [ ] Change the color manually
+* [x] Change the color manually
 * [x] Close the note
 * [x] Edit the note title (enter in edition with double click)
 * [x] Resize the note
 * [ ] Share a note on LAN
 * [ ] Manage the list of notes
+* [ ] Manage transparency when the flynote loose the focus
 
 ## Compile
 
