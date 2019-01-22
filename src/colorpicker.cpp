@@ -27,7 +27,6 @@ ColorPicker::~ColorPicker()
 
 }
 
-#include <QDebug>
 void ColorPicker::mousePressEvent(QMouseEvent *evt)
 {
     Q_UNUSED(evt);
