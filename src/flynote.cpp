@@ -43,6 +43,11 @@ FlyNote::~FlyNote()
     delete vLayout;
 }
 
+QString FlyNote::getTitle() const
+{
+    return flynoteTitle->getTitle();
+}
+
 QColor FlyNote::getColor() const
 {
     return color;

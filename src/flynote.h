@@ -20,6 +20,7 @@ public:
     explicit FlyNote(const QString& title, const QString& text);
     explicit FlyNote(const QColor& color, const QString& title, const QString& text);
     ~FlyNote() override;
+    QString getTitle() const;
     QColor getColor() const;
     void setColor(const QColor& color);
     int getAlpha() const;

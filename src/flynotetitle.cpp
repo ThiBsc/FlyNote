@@ -56,6 +56,11 @@ void FlyNoteTitle::updateButtons()
     btnColor->updateButtons();
 }
 
+QString FlyNoteTitle::getTitle() const
+{
+    return editTitle->text();
+}
+
 void FlyNoteTitle::openNewNote()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine

@@ -30,14 +30,16 @@ SOURCES += \
     src/mainwindow.cpp \
     src/flynotetitle.cpp \
     src/flynotebutton.cpp \
-    src/colorpicker.cpp
+    src/colorpicker.cpp \
+    src/notelistmodel.cpp
 
 HEADERS += \
     src/flynote.h \
     src/mainwindow.h \
     src/flynotetitle.h \
     src/flynotebutton.h \
-    src/colorpicker.h
+    src/colorpicker.h \
+    src/notelistmodel.h
 
 FORMS += \
         mainwindow.ui
@@ -46,3 +48,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    icons.qrc

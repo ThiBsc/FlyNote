@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListView>
+#include <QVBoxLayout>
 
 #include "flynote.h"
+#include "notelistmodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +24,10 @@ private:
     Ui::MainWindow *ui;
 
     FlyNote *fnote;
+    QVBoxLayout *vLayout;
+    QListView *noteListView;
+    NoteListModel *notelistModel;
+
 };
 
 #endif // MAINWINDOW_H

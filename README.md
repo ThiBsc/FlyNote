@@ -20,8 +20,12 @@ A program to take note on desktop like a Post-It
 ## Compile
 
 ```sh
+# require qt5-default
 mkdir build
 cd build
 qmake ../flynote.pro
 make
 ```
+
+## Icons
+Note icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  

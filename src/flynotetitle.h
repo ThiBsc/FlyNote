@@ -15,6 +15,7 @@ public:
     explicit FlyNoteTitle(const QString& title, FlyNote *parent);
     ~FlyNoteTitle() override;
     void updateButtons();
+    QString getTitle() const;
 
 signals:
     void wantPickerColor();
