@@ -134,7 +134,7 @@ int NoteListModel::notePosition(FlyNote *note)
         return jobj.value("address").toString() == QString(ss.str().c_str());
     });
     if (res != noteArray.end()){
-        position = std::distance(noteArray.begin(), res);
+        position = res - noteArray.begin();
     }
     return position;
 }
