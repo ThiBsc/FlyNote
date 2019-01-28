@@ -101,7 +101,7 @@ void NoteListModel::insertNote(int row, FlyNote *note)
     {
         {"title", note->getTitle()},
         {"color", note->getColor().name()},
-        {"address", ss.str().c_str()}
+        {"address", QString(ss.str().c_str())}
     };
     noteArray.push_back(jsonNote);
     endInsertRows();
