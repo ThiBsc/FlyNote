@@ -2,6 +2,8 @@
 
 #include "flynote.h"
 
+#include <sstream>
+
 NoteListModel *NoteListModel::instance = nullptr;
 
 NoteListModel::NoteListModel(QObject *parent)
@@ -92,11 +94,14 @@ Qt::ItemFlags NoteListModel::flags(const QModelIndex &index) const
 void NoteListModel::insertNote(int row, FlyNote *note)
 {
     beginInsertRows(index(row).parent(), row, row);
+    const void *address = static_cast<const void*>(note);
+    std::stringstream ss;
+    ss << address;
     QJsonObject jsonNote
     {
         {"title", note->getTitle()},
         {"color", note->getColor().name()},
-        {"addr", reinterpret_cast<int>(note)}
+        {"address", ss.str().c_str()}
     };
     noteArray.push_back(jsonNote);
     endInsertRows();
@@ -125,7 +130,10 @@ int NoteListModel::notePosition(FlyNote *note)
     int position = -1;
     QJsonArray::iterator res = std::find_if(noteArray.begin(), noteArray.end(), [note](const QJsonValue &jval){
         QJsonObject jobj = jval.toObject();
-        return jobj.value("addr").toInt() == reinterpret_cast<int>(note);
+        const void *address = static_cast<const void*>(note);
+        std::stringstream ss;
+        ss << address;
+        return jobj.value("address").toString() == ss.str().c_str();
     });
     if (res != noteArray.end()){
         position = std::distance(noteArray.begin(), res);
