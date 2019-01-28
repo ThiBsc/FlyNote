@@ -125,18 +125,16 @@ bool NoteListModel::removeNote(FlyNote *note)
 
 int NoteListModel::notePosition(FlyNote *note)
 {
-    int position = -1;
-    QJsonArray::iterator res = std::find_if(noteArray.begin(), noteArray.end(), [note](const QJsonValue &jval){
-        QJsonObject jobj = jval.toObject();
-        const void *address = static_cast<const void*>(note);
-        std::stringstream ss;
-        ss << address;
-        return jobj.value("address").toString() == QString(ss.str().c_str());
-    });
-    if (res != noteArray.end()){
-        position = res - noteArray.begin();
+    bool finded = false;
+    int position = 0;
+    const void *address = static_cast<const void*>(note);
+    std::stringstream ss;
+    ss << address;
+    while (!finded && position < noteArray.size()){
+        QJsonObject jobj = noteArray.at(position++).toObject();
+        finded = jobj.value("address").toString() == QString(ss.str().c_str());
     }
-    return position;
+    return (finded ? position-1 : -1);
 }
 
 void NoteListModel::updateNote(FlyNote *note)
