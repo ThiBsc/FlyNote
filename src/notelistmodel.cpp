@@ -100,7 +100,7 @@ void NoteListModel::insertNote(int row, FlyNote *note)
     QJsonObject jsonNote;
     jsonNote.insert("title", note->getTitle());
     jsonNote.insert("color", note->getColor().name());
-    jsonNote.insert("address", ss.str().c_str());
+    jsonNote.insert("address", QString(ss.str().c_str()));
     noteArray.push_back(jsonNote);
     endInsertRows();
 }
@@ -131,7 +131,7 @@ int NoteListModel::notePosition(FlyNote *note)
         const void *address = static_cast<const void*>(note);
         std::stringstream ss;
         ss << address;
-        return jobj.value("address").toString() == ss.str().c_str();
+        return jobj.value("address").toString() == QString(ss.str().c_str());
     });
     if (res != noteArray.end()){
         position = std::distance(noteArray.begin(), res);
