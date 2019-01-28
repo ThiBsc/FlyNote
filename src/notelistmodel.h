@@ -2,6 +2,8 @@
 #define NOTELISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QJsonArray>
+#include <QJsonObject>
 
 class FlyNote;
 
@@ -10,9 +12,7 @@ class NoteListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit NoteListModel(QObject *parent = nullptr);
-    ~NoteListModel() override;
-
+    static NoteListModel *getInstance();
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     // Basic functionality:
@@ -24,8 +24,19 @@ public:
     // Manage data:
     void insertNote(int row, FlyNote *note);
     void removeNote(int row);
+    bool removeNote(FlyNote *note);
+    int notePosition(FlyNote *note);
+
+public slots:
+    void updateNote(FlyNote *note);
 
 private:
+    static NoteListModel *instance;
+    explicit NoteListModel(QObject *parent = nullptr);
+    ~NoteListModel() override;
+
+    QJsonArray noteArray;
+
 
 };
 

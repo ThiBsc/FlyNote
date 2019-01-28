@@ -37,7 +37,8 @@ FlyNoteTitle::FlyNoteTitle(const QString &title, FlyNote *parent)
     connect(btnNew, SIGNAL(clicked()), this, SLOT(openNewNote()));
     connect(btnColor, SIGNAL(clicked()), this, SLOT(openColor()));
     // Manage the validation of the new title
-    connect(editTitle, SIGNAL(editingFinished()), this, SLOT(titleChanged()));
+    connect(editTitle, SIGNAL(textChanged(const QString&)), this, SLOT(emitTitleChanged(const QString&)));
+    connect(editTitle, SIGNAL(editingFinished()), this, SLOT(disableTitleAfterEdit()));
 }
 
 FlyNoteTitle::~FlyNoteTitle()
@@ -75,9 +76,14 @@ void FlyNoteTitle::openColor()
     emit wantPickerColor();
 }
 
-void FlyNoteTitle::titleChanged()
+void FlyNoteTitle::disableTitleAfterEdit()
 {
     editTitle->setEnabled(false);
+}
+
+void FlyNoteTitle::emitTitleChanged(const QString &title)
+{
+    emit titleChanged(title);
 }
 
 void FlyNoteTitle::mousePressEvent(QMouseEvent *evt)

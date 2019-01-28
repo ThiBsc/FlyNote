@@ -19,11 +19,13 @@ public:
 
 signals:
     void wantPickerColor();
+    void titleChanged(const QString &newTitle);
 
 public slots:
     void openNewNote();
     void openColor();
-    void titleChanged();
+    void disableTitleAfterEdit();
+    void emitTitleChanged(const QString &newTitle);
 
 protected:
     /** https://qt.developpez.com/tutoriels/braindeadbzh/customwindow/ */

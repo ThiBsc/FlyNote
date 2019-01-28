@@ -14,7 +14,7 @@ A program to take note on desktop like a Post-It
 * [x] Edit the note title (enter in edition with double click)
 * [x] Resize the note
 * [ ] Share a note on LAN
-* [ ] Manage the list of notes
+* [ ] Manage the list of notes (in development)
 * [x] Manage transparency when the flynote loose the focus
 
 ## Compile

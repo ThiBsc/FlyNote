@@ -27,10 +27,12 @@ public:
     void setAlpha(int alpha);
 
 signals:
+    void noteAppearanceChanged(FlyNote *note);
 
 public slots:
     void displayPickerColor();
     void invertAnimationSettings();
+    void emitNoteAppearanceChanged();
 
 protected:
     void changeEvent(QEvent *evt) override;

@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , fnote(new FlyNote("My note", "Hello world!"))
     , vLayout(new QVBoxLayout(centralWidget()))
     , noteListView(new QListView(this))
-    , notelistModel(new NoteListModel(noteListView))
+    , notelistModel(NoteListModel::getInstance())
 {
     ui->setupUi(this);
 
@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete notelistModel;
     delete noteListView;
     delete vLayout;
 }

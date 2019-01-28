@@ -1,6 +1,7 @@
 #include "flynote.h"
 #include "flynotetitle.h"
 #include "colorpicker.h"
+#include "notelistmodel.h"
 
 #include <QPainter>
 #include <QEvent>
@@ -35,6 +36,9 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
 
 FlyNote::~FlyNote()
 {
+    NoteListModel *model = NoteListModel::getInstance();
+    model->removeNote(this);
+
     delete flynoteTitle;
     delete editText;
     delete focusAlphaAnimation;
@@ -58,6 +62,7 @@ void FlyNote::setColor(const QColor &color)
     this->color = color;
     flynoteTitle->updateButtons();
     update();
+    emit noteAppearanceChanged(this);
 }
 
 int FlyNote::getAlpha() const
@@ -81,6 +86,11 @@ void FlyNote::invertAnimationSettings()
     QVariant tmp = pickerAnimation->startValue();
     pickerAnimation->setStartValue(pickerAnimation->endValue());
     pickerAnimation->setEndValue(tmp);
+}
+
+void FlyNote::emitNoteAppearanceChanged()
+{
+    emit noteAppearanceChanged(this);
 }
 
 /** trick:
@@ -128,6 +138,12 @@ void FlyNote::resizeEvent(QResizeEvent *evt)
 
 void FlyNote::init()
 {
+    // Add this to the NoteListModel
+    NoteListModel *model = NoteListModel::getInstance();
+    model->insertNote(model->rowCount(), this);
+    connect(this, SIGNAL(noteAppearanceChanged(FlyNote*)), model, SLOT(updateNote(FlyNote*)));
+    connect(flynoteTitle, SIGNAL(titleChanged(const QString&)), this, SLOT(emitNoteAppearanceChanged()));
+
     // Set transparent and no border textedit
     QPalette pal = editText->palette();
     pal.setBrush(QPalette::Base, Qt::transparent);
