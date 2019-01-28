@@ -97,12 +97,10 @@ void NoteListModel::insertNote(int row, FlyNote *note)
     const void *address = static_cast<const void*>(note);
     std::stringstream ss;
     ss << address;
-    QJsonObject jsonNote
-    {
-        {"title", note->getTitle()},
-        {"color", note->getColor().name()},
-        {"address", QString(ss.str().c_str())}
-    };
+    QJsonObject jsonNote;
+    jsonNote.insert("title", note->getTitle());
+    jsonNote.insert("color", note->getColor().name());
+    jsonNote.insert("address", ss.str().c_str());
     noteArray.push_back(jsonNote);
     endInsertRows();
 }
