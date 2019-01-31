@@ -20,13 +20,17 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void editNote();
+
 private:
     Ui::MainWindow *ui;
 
-    FlyNote *fnote;
     QVBoxLayout *vLayout;
     QListView *noteListView;
     NoteListModel *notelistModel;
+
+    QAction *actAddNote, *actEditNote;
 
 };
 

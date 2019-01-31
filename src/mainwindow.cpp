@@ -4,7 +4,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , fnote(new FlyNote("My note", "Hello world!"))
     , vLayout(new QVBoxLayout(centralWidget()))
     , noteListView(new QListView(this))
     , notelistModel(NoteListModel::getInstance())
@@ -17,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     vLayout->addWidget(noteListView);
     centralWidget()->setLayout(vLayout);
 
-    fnote->show();
+    actAddNote = ui->mainToolBar->addAction(QIcon("://icons/add"), "New note", notelistModel, SLOT(addNote()));
+    actEditNote = ui->mainToolBar->addAction(QIcon("://icons/edit"), "Edit note", this, SLOT(editNote()));
+
     setWindowTitle("FlyNote");
     setWindowIcon(QIcon("://icons/note.png"));
     resize(300, 350);
@@ -27,5 +28,12 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete noteListView;
+    delete actAddNote;
+    delete actEditNote;
     delete vLayout;
+}
+
+void MainWindow::editNote()
+{
+    notelistModel->editNote(noteListView->currentIndex());
 }

@@ -1,6 +1,6 @@
 #include "notelistmodel.h"
-
 #include "flynote.h"
+#include "colorpicker.h"
 
 #include <sstream>
 
@@ -63,6 +63,8 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
         } else if (role == Qt::FontRole){
             QFont font("Courier");
             ret = font;
+        } else if (role == Qt::ForegroundRole){
+            ret = (noteArray.at(index.row()).toObject().contains("address") ? QColor(Qt::black) : QColor(Qt::gray));
         } else {
             // do nothing;
         }
@@ -84,7 +86,7 @@ Qt::ItemFlags NoteListModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags iflags;
     if (index.isValid()){
-        iflags = (Qt::ItemIsEnabled | Qt::ItemIsEditable);
+        iflags = (Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
     } else {
         iflags = Qt::NoItemFlags;
     }
@@ -123,6 +125,20 @@ bool NoteListModel::removeNote(FlyNote *note)
     return removed;
 }
 
+bool NoteListModel::disableNote(FlyNote *note)
+{
+    bool disabled = false;
+    int position = notePosition(note);
+    if (position != -1){
+        QJsonObject jsonNote = noteArray.at(position).toObject();
+        jsonNote.remove("address");
+        noteArray.replace(position, jsonNote);
+        disabled = true;
+        emit dataChanged(index(position), index(position), {Qt::ForegroundRole});
+    }
+    return disabled;
+}
+
 int NoteListModel::notePosition(FlyNote *note)
 {
     bool finded = false;
@@ -135,6 +151,37 @@ int NoteListModel::notePosition(FlyNote *note)
         finded = jobj.value("address").toString() == QString(ss.str().c_str());
     }
     return (finded ? position-1 : -1);
+}
+
+void NoteListModel::addNote()
+{
+    beginInsertRows(index(rowCount()).parent(), rowCount(), rowCount());
+    QJsonObject jsonNote;
+    jsonNote.insert("title", QString("New note #%1").arg(rowCount()+1));
+    jsonNote.insert("color", ColorPicker::getRandomColor().name());
+    noteArray.push_back(jsonNote);
+    endInsertRows();
+}
+
+void NoteListModel::editNote(const QModelIndex &noteindex)
+{
+    if (noteindex.isValid()){
+        QJsonObject jsonNote = noteArray.at(noteindex.row()).toObject();
+        if (jsonNote.contains("address")){
+            // do nothing;
+            //qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            //reinterpret_cast<FlyNote*>(ptr)->setFocus(Qt::FocusReason::MouseFocusReason);
+        } else {
+            FlyNote *newNote = new FlyNote(QColor(jsonNote.value("color").toString()), jsonNote.value("title").toString(), jsonNote.value("content").toString());
+            newNote->show();
+            const void *address = static_cast<const void*>(newNote);
+            std::stringstream ss;
+            ss << address;
+            jsonNote.insert("address", QString(ss.str().c_str()));
+            noteArray.replace(noteindex.row(), jsonNote);
+            emit dataChanged(index(rowCount()-1), index(rowCount()-1), {Qt::ForegroundRole});
+        }
+    }
 }
 
 void NoteListModel::updateNote(FlyNote *note)

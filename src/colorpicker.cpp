@@ -5,6 +5,8 @@
 #include <QMouseEvent>
 #include <QColorDialog>
 
+#include <random>
+
 QVector<QColor> ColorPicker::colorNotes =
 {
     QColor("lightblue"),
@@ -25,6 +27,14 @@ ColorPicker::ColorPicker(FlyNote *parent)
 ColorPicker::~ColorPicker()
 {
 
+}
+
+QColor ColorPicker::getRandomColor()
+{
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> dis(1, ColorPicker::colorNotes.size());
+    return colorNotes.at(dis(gen)-1);
 }
 
 void ColorPicker::mousePressEvent(QMouseEvent *evt)

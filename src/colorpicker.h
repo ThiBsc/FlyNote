@@ -12,6 +12,7 @@ public:
     explicit ColorPicker(FlyNote *parent = nullptr);
     ~ColorPicker() override;
     static QVector<QColor> colorNotes;
+    static QColor getRandomColor();
 
 signals:
 

@@ -25,9 +25,12 @@ public:
     void insertNote(int row, FlyNote *note);
     void removeNote(int row);
     bool removeNote(FlyNote *note);
+    bool disableNote(FlyNote *note);
     int notePosition(FlyNote *note);
 
 public slots:
+    void addNote();
+    void editNote(const QModelIndex &noteindex);
     void updateNote(FlyNote *note);
 
 private:

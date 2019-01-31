@@ -28,4 +28,4 @@ make
 ```
 
 ## Icons
-Note icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  
+Note, add and edit icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  

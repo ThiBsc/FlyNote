@@ -5,8 +5,6 @@
 
 #include <QMouseEvent>
 
-#include <random>
-
 FlyNoteTitle::FlyNoteTitle(const QString &title, FlyNote *parent)
     : QWidget (parent)
     , hLayout(new QHBoxLayout(this))
@@ -64,10 +62,7 @@ QString FlyNoteTitle::getTitle() const
 
 void FlyNoteTitle::openNewNote()
 {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> dis(1, ColorPicker::colorNotes.size());
-    FlyNote *f = new FlyNote(ColorPicker::colorNotes.at(dis(gen)-1), "New note", "");
+    FlyNote *f = new FlyNote(ColorPicker::getRandomColor(), "New note", "");
     f->show();
 }
 
