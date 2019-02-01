@@ -14,7 +14,8 @@ A program to take note on desktop like a Post-It
 * [x] Edit the note title (enter in edition with double click)
 * [x] Resize the note
 * [ ] Share a note on LAN
-* [ ] Manage the list of notes (in development)
+* [x] Manage the list of notes
+* [ ] Save the list of notes
 * [x] Manage transparency when the flynote loose the focus
 
 ## Compile
@@ -28,4 +29,4 @@ make
 ```
 
 ## Icons
-Note, add and edit icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  
+Note, add, delete and edit icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  

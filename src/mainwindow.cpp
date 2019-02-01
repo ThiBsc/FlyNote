@@ -16,8 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     vLayout->addWidget(noteListView);
     centralWidget()->setLayout(vLayout);
 
-    actAddNote = ui->mainToolBar->addAction(QIcon("://icons/add"), "New note", notelistModel, SLOT(addNote()));
-    actEditNote = ui->mainToolBar->addAction(QIcon("://icons/edit"), "Edit note", this, SLOT(editNote()));
+    ui->mainToolBar->addAction(QIcon("://icons/add"), "New note", notelistModel, SLOT(addNote()));
+    ui->mainToolBar->addAction(QIcon("://icons/delete"), "Delete note", this, SLOT(deleteNote()));
+    ui->mainToolBar->addAction(QIcon("://icons/edit"), "Edit note", this, SLOT(editNote()));
 
     setWindowTitle("FlyNote");
     setWindowIcon(QIcon("://icons/note.png"));
@@ -28,12 +29,15 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete noteListView;
-    delete actAddNote;
-    delete actEditNote;
     delete vLayout;
 }
 
 void MainWindow::editNote()
 {
     notelistModel->editNote(noteListView->currentIndex());
+}
+
+void MainWindow::deleteNote()
+{
+    notelistModel->deleteNote(noteListView->currentIndex());
 }

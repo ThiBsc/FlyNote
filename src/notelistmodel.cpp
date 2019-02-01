@@ -194,6 +194,18 @@ void NoteListModel::editNote(const QModelIndex &noteindex)
     }
 }
 
+void NoteListModel::deleteNote(const QModelIndex &noteindex)
+{
+    if (noteindex.isValid()){
+        QJsonObject jsonNote = noteArray.at(noteindex.row()).toObject();
+        if (jsonNote.contains("address")){
+            qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            delete reinterpret_cast<FlyNote*>(ptr);
+        }
+        removeNote(noteindex.row());
+    }
+}
+
 void NoteListModel::updateNote(FlyNote *note)
 {
     int position = notePosition(note);

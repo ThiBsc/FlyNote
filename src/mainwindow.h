@@ -22,6 +22,7 @@ public:
 
 public slots:
     void editNote();
+    void deleteNote();
 
 private:
     Ui::MainWindow *ui;
@@ -29,8 +30,6 @@ private:
     QVBoxLayout *vLayout;
     QListView *noteListView;
     NoteListModel *notelistModel;
-
-    QAction *actAddNote, *actEditNote;
 
 };
 

@@ -31,6 +31,7 @@ public:
 public slots:
     void addNote();
     void editNote(const QModelIndex &noteindex);
+    void deleteNote(const QModelIndex &noteindex);
     void updateNote(FlyNote *note);
 
 private:
