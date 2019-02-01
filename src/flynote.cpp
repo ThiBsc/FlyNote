@@ -47,6 +47,11 @@ FlyNote::~FlyNote()
     delete vLayout;
 }
 
+void FlyNote::setTitle(const QString &title)
+{
+    flynoteTitle->setTitle(title);
+}
+
 QString FlyNote::getTitle() const
 {
     return flynoteTitle->getTitle();

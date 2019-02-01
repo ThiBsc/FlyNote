@@ -15,6 +15,7 @@ public:
     explicit FlyNoteTitle(const QString& title, FlyNote *parent);
     ~FlyNoteTitle() override;
     void updateButtons();
+    void setTitle(const QString &title);
     QString getTitle() const;
 
 signals:

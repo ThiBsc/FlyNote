@@ -55,6 +55,11 @@ void FlyNoteTitle::updateButtons()
     btnColor->updateButtons();
 }
 
+void FlyNoteTitle::setTitle(const QString &title)
+{
+    editTitle->setText(title);
+}
+
 QString FlyNoteTitle::getTitle() const
 {
     return editTitle->text();

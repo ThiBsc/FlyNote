@@ -74,12 +74,22 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
 
 bool NoteListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (data(index, role) != value) {
-        // FIXME: Implement me!
-        emit dataChanged(index, index, QVector<int>() << role);
-        return true;
+    bool ret = false;
+    if (data(index, role) != value && role == Qt::EditRole) {
+        QJsonObject jsonNote = noteArray.at(index.row()).toObject();
+        if (jsonNote.contains("address")){
+            qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            auto fnote = reinterpret_cast<FlyNote*>(ptr);
+            fnote->setTitle(value.toString());
+            jsonNote["title"] = fnote->getTitle();
+        } else {
+            jsonNote["title"] = value.toString();
+        }
+        noteArray.replace(index.row(), jsonNote);
+        emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+        ret = true;
     }
-    return false;
+    return ret;
 }
 
 Qt::ItemFlags NoteListModel::flags(const QModelIndex &index) const
