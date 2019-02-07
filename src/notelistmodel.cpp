@@ -179,7 +179,7 @@ void NoteListModel::addNote()
     beginInsertRows(index(rowCount()).parent(), rowCount(), rowCount());
     QJsonObject jsonNote;
     jsonNote.insert("title", QString("New note #%1").arg(rowCount()+1));
-    jsonNote.insert("content", "");
+    jsonNote.insert("content", QString(""));
     jsonNote.insert("color", ColorPicker::getRandomColor().name());
     noteArray.push_back(jsonNote);
     endInsertRows();
