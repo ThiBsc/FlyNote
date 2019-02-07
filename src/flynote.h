@@ -22,6 +22,8 @@ public:
     ~FlyNote() override;
     void setTitle(const QString &title);
     QString getTitle() const;
+    void setContent(const QString &content);
+    QString getContent() const;
     QColor getColor() const;
     void setColor(const QColor& color);
     int getAlpha() const;

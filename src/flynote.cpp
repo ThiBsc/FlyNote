@@ -57,6 +57,16 @@ QString FlyNote::getTitle() const
     return flynoteTitle->getTitle();
 }
 
+void FlyNote::setContent(const QString &content)
+{
+    editText->setText(content);
+}
+
+QString FlyNote::getContent() const
+{
+    return editText->toPlainText();
+}
+
 QColor FlyNote::getColor() const
 {
     return color;
@@ -148,6 +158,7 @@ void FlyNote::init()
     //model->insertNote(model->rowCount(), this);
     connect(this, SIGNAL(noteAppearanceChanged(FlyNote*)), model, SLOT(updateNote(FlyNote*)));
     connect(flynoteTitle, SIGNAL(titleChanged(const QString&)), this, SLOT(emitNoteAppearanceChanged()));
+    connect(editText, SIGNAL(textChanged()), this, SLOT(emitNoteAppearanceChanged()));
 
     // Set transparent and no border textedit
     QPalette pal = editText->palette();

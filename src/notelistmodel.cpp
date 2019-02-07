@@ -111,6 +111,7 @@ void NoteListModel::insertNote(int row, FlyNote *note)
     ss << address;
     QJsonObject jsonNote;
     jsonNote.insert("title", note->getTitle());
+    jsonNote.insert("content", note->getContent());
     jsonNote.insert("color", note->getColor().name());
     jsonNote.insert("address", QString(ss.str().c_str()));
     noteArray.push_back(jsonNote);
@@ -163,11 +164,22 @@ int NoteListModel::notePosition(FlyNote *note)
     return (finded ? position-1 : -1);
 }
 
+void NoteListModel::saveNotes()
+{
+    // do something
+}
+
+void NoteListModel::readNotes()
+{
+    // do something
+}
+
 void NoteListModel::addNote()
 {
     beginInsertRows(index(rowCount()).parent(), rowCount(), rowCount());
     QJsonObject jsonNote;
     jsonNote.insert("title", QString("New note #%1").arg(rowCount()+1));
+    jsonNote.insert("content", "");
     jsonNote.insert("color", ColorPicker::getRandomColor().name());
     noteArray.push_back(jsonNote);
     endInsertRows();
@@ -212,6 +224,7 @@ void NoteListModel::updateNote(FlyNote *note)
     if (position != -1){
         QJsonObject jsonNote = noteArray.at(position).toObject();
         jsonNote["title"] = note->getTitle();
+        jsonNote["content"] = note->getContent();
         jsonNote["color"] = note->getColor().name();
         noteArray.replace(position, jsonNote);
         emit dataChanged(index(position), index(position), {Qt::DisplayRole, Qt::BackgroundRole});

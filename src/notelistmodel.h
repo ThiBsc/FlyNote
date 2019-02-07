@@ -27,6 +27,8 @@ public:
     bool removeNote(FlyNote *note);
     bool disableNote(FlyNote *note);
     int notePosition(FlyNote *note);
+    void saveNotes();
+    void readNotes();
 
 public slots:
     void addNote();
