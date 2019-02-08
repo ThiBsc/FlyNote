@@ -2,6 +2,9 @@
 #include "flynote.h"
 #include "colorpicker.h"
 
+#include <QFile>
+#include <QJsonDocument>
+
 #include <sstream>
 
 NoteListModel *NoteListModel::instance = nullptr;
@@ -166,12 +169,29 @@ int NoteListModel::notePosition(FlyNote *note)
 
 void NoteListModel::saveNotes()
 {
-    // do something
+    QJsonDocument saveDoc(noteArray);
+    QFile saveFile("notes.json");
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+    } else {
+        saveFile.write(saveDoc.toJson());
+        saveFile.close();
+    }
 }
 
 void NoteListModel::readNotes()
 {
-    // do something
+    QFile file("notes.json");
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+    } else {
+        QByteArray notesData = file.readAll();
+        file.close();
+        QJsonDocument loadNotes(QJsonDocument::fromJson(notesData));
+        beginResetModel();
+        noteArray = loadNotes.array();
+        endResetModel();
+    }
 }
 
 void NoteListModel::addNote()
