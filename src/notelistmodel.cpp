@@ -7,7 +7,7 @@
 
 #include <sstream>
 
-NoteListModel *NoteListModel::instance = nullptr;
+NoteListModel *NoteListModel::instance = new NoteListModel(nullptr);
 
 NoteListModel::NoteListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -16,15 +16,6 @@ NoteListModel::NoteListModel(QObject *parent)
 
 NoteListModel::~NoteListModel()
 {
-    delete instance;
-}
-
-NoteListModel *NoteListModel::getInstance()
-{
-    if (!instance){
-        instance = new NoteListModel();
-    }
-    return instance;
 }
 
 QVariant NoteListModel::headerData(int section, Qt::Orientation orientation, int role) const

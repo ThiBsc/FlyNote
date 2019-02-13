@@ -36,7 +36,7 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
 
 FlyNote::~FlyNote()
 {
-    NoteListModel *model = NoteListModel::getInstance();
+    NoteListModel *model = NoteListModel::instance;
     model->disableNote(this);
 
     delete flynoteTitle;
@@ -154,7 +154,7 @@ void FlyNote::resizeEvent(QResizeEvent *evt)
 void FlyNote::init()
 {
     // Link this to the NoteListModel
-    NoteListModel *model = NoteListModel::getInstance();
+    NoteListModel *model = NoteListModel::instance;
     //model->insertNote(model->rowCount(), this);
     connect(this, SIGNAL(noteAppearanceChanged(FlyNote*)), model, SLOT(updateNote(FlyNote*)));
     connect(flynoteTitle, SIGNAL(titleChanged(const QString&)), this, SLOT(emitNoteAppearanceChanged()));

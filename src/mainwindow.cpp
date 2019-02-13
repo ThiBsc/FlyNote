@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , vLayout(new QVBoxLayout(centralWidget()))
     , noteListView(new QListView(this))
-    , notelistModel(NoteListModel::getInstance())
+    , notelistModel(NoteListModel::instance)
 {
     ui->setupUi(this);
 

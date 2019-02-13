@@ -4,8 +4,15 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    NoteListModel::instance->readNotes();
+
     MainWindow w;
     w.show();
 
-    return a.exec();
+    int ret = a.exec();
+    NoteListModel::instance->saveNotes();
+    delete NoteListModel::instance;
+
+    return ret;
 }

@@ -12,7 +12,9 @@ class NoteListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    static NoteListModel *getInstance();
+    explicit NoteListModel(QObject *parent = nullptr);
+    ~NoteListModel() override;
+    static NoteListModel *instance;
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     // Basic functionality:
@@ -37,10 +39,6 @@ public slots:
     void updateNote(FlyNote *note);
 
 private:
-    static NoteListModel *instance;
-    explicit NoteListModel(QObject *parent = nullptr);
-    ~NoteListModel() override;
-
     QJsonArray noteArray;
 
 
