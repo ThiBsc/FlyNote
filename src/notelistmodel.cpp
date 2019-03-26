@@ -40,6 +40,8 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     if (index.isValid()){
         if (role == Qt::DisplayRole){
             ret = noteArray.at(index.row()).toObject().value("title");
+        } else if (role == Qt::EditRole){
+            ret = data(index, Qt::DisplayRole);
         } else if (role == Qt::BackgroundRole){
             QColor color(noteArray.at(index.row()).toObject().value("color").toString());
 
