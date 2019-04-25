@@ -1,5 +1,5 @@
 # FlyNote :pencil2:
-[![Build Status](https://travis-ci.org/thibDev/FlyNote.svg?branch=master)](https://travis-ci.org/thibDev/FlyNote)
+[![Build Status](https://travis-ci.org/ThiBsc/FlyNote.svg?branch=master)](https://travis-ci.org/ThiBsc/FlyNote)
 [![License: MIT](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0)
 
 A program to take note on desktop like a Post-It
