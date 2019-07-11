@@ -9,7 +9,7 @@
 FlyNote::FlyNote(const QString &title, const QString &text)
     : QWidget (nullptr)
     , vLayout(new QVBoxLayout(this))
-    , editText(new QTextEdit(text, this))
+    , editText(new QTextEdit(this))
     , color(QColor("lightblue"))
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
@@ -17,13 +17,14 @@ FlyNote::FlyNote(const QString &title, const QString &text)
     , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
     , focusAlphaAnimation(new QPropertyAnimation(this, "alpha"))
 {
+    setContent(text);
     init();
 }
 
 FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
     : QWidget (nullptr)
     , vLayout(new QVBoxLayout(this))
-    , editText(new QTextEdit(text, this))
+    , editText(new QTextEdit(this))
     , color(color)
     , sizeGrip(this)
     , flynoteTitle(new FlyNoteTitle(title, this))
@@ -31,6 +32,7 @@ FlyNote::FlyNote(const QColor &color, const QString &title, const QString &text)
     , pickerAnimation(new QPropertyAnimation(colorPicker, "minimumHeight", this))
     , focusAlphaAnimation(new QPropertyAnimation(this, "alpha"))
 {
+    setContent(text);
     init();
 }
 
@@ -59,7 +61,7 @@ QString FlyNote::getTitle() const
 
 void FlyNote::setContent(const QString &content)
 {
-    editText->setText(content);
+    editText->setPlainText(content);
 }
 
 QString FlyNote::getContent() const
