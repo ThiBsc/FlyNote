@@ -40,6 +40,12 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     if (index.isValid()){
         if (role == Qt::DisplayRole){
             ret = noteArray.at(index.row()).toObject().value("title");
+        } else if (role == Qt::ToolTipRole){
+            QString content = noteArray.at(index.row()).toObject().value("content").toString();
+            if (content.length() > 40){
+                content = content.left(37).leftJustified(40, '.');
+            }
+            ret = QString("<b>%1</b><br>%2").arg(data(index, Qt::DisplayRole).toString(), content);
         } else if (role == Qt::EditRole){
             ret = data(index, Qt::DisplayRole);
         } else if (role == Qt::BackgroundRole){
@@ -160,8 +166,16 @@ int NoteListModel::notePosition(FlyNote *note)
     return (finded ? position-1 : -1);
 }
 
-void NoteListModel::saveNotes()
+void NoteListModel::saveNotes(bool leaveprogram)
 {
+    // When leave, remove address
+    if (leaveprogram){
+        for (QJsonValueRef val : noteArray){
+            QJsonObject note = val.toObject();
+            note.remove("address");
+            val = note;
+        }
+    }
     QJsonDocument saveDoc(noteArray);
     QFile saveFile("notes.json");
     if (!saveFile.open(QIODevice::WriteOnly)) {
