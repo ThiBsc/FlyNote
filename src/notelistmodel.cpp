@@ -4,6 +4,7 @@
 
 #include <QFile>
 #include <QJsonDocument>
+#include <QIcon>
 
 #include <sstream>
 
@@ -48,6 +49,10 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
             ret = QString("<b>%1</b><br>%2").arg(data(index, Qt::DisplayRole).toString(), content);
         } else if (role == Qt::EditRole){
             ret = data(index, Qt::DisplayRole);
+        } else if (role == Qt::DecorationRole){
+            if (noteArray.at(index.row()).toObject().contains("received")){
+                ret = QIcon("://icons/broadcast");
+            }
         } else if (role == Qt::BackgroundRole){
             QColor color(noteArray.at(index.row()).toObject().value("color").toString());
 
@@ -105,6 +110,13 @@ Qt::ItemFlags NoteListModel::flags(const QModelIndex &index) const
     return iflags;
 }
 
+void NoteListModel::insertJsonNote(int row, QJsonObject note)
+{
+    beginInsertRows(index(row).parent(), row, row);
+    noteArray.push_back(note);
+    endInsertRows();
+}
+
 void NoteListModel::insertNote(int row, FlyNote *note)
 {
     beginInsertRows(index(row).parent(), row, row);
@@ -152,7 +164,7 @@ bool NoteListModel::disableNote(FlyNote *note)
     return disabled;
 }
 
-int NoteListModel::notePosition(FlyNote *note)
+int NoteListModel::notePosition(FlyNote *note) const
 {
     bool finded = false;
     int position = 0;
@@ -164,6 +176,11 @@ int NoteListModel::notePosition(FlyNote *note)
         finded = jobj.value("address").toString() == QString(ss.str().c_str());
     }
     return (finded ? position-1 : -1);
+}
+
+QJsonObject NoteListModel::jsonNote(int index) const
+{
+    return noteArray.at(index).toObject();
 }
 
 void NoteListModel::saveNotes(bool leaveprogram)

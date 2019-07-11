@@ -24,11 +24,13 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
     // Manage data:
+    void insertJsonNote(int row, QJsonObject note);
     void insertNote(int row, FlyNote *note);
     void removeNote(int row);
     bool removeNote(FlyNote *note);
     bool disableNote(FlyNote *note);
-    int notePosition(FlyNote *note);
+    int notePosition(FlyNote *note) const;
+    QJsonObject jsonNote(int index) const;
     void saveNotes(bool leaveprogram = false);
     void readNotes();
 
@@ -40,7 +42,6 @@ public slots:
 
 private:
     QJsonArray noteArray;
-
 
 };
 

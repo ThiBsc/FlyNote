@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/ThiBsc/FlyNote.svg?branch=master)](https://travis-ci.org/ThiBsc/FlyNote)
 [![License: MIT](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0)
 
-A program to take note on desktop like a Post-It
+A program to take note on desktop like a Post-It and share on LAN.
 
 ![FlyNote](screenshot/sample.jpg)
 
@@ -13,7 +13,7 @@ A program to take note on desktop like a Post-It
 * [x] Close the note
 * [x] Edit the note title (enter in edition with double click)
 * [x] Resize the note
-* [ ] Share a note on LAN
+* [x] Share a note on LAN
 * [x] Manage the list of notes
 * [x] Save the list of notes
 * [x] Manage transparency when the flynote loose the focus

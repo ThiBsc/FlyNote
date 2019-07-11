@@ -4,5 +4,7 @@
         <file>icons/add.png</file>
         <file>icons/edit.png</file>
         <file>icons/delete.png</file>
+        <file>icons/send.png</file>
+        <file>icons/broadcast.png</file>
     </qresource>
 </RCC>
