@@ -15,7 +15,7 @@ A program to take note on desktop like a Post-It and share on LAN.
 * [x] Save the list of notes
 * [x] Share a note on LAN
 * [ ] Send to one user
-* [ ] Receive notification
+* [x] Receive notification
 
 ## Compile
 
@@ -27,7 +27,7 @@ qmake ../flynote.pro
 make
 ```
 
-## Network test
+## Broadcast test
 
 If you want to test the broadcast receiver, start FlyNote, start a shell and write:
 ```bash

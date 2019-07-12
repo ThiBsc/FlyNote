@@ -12,6 +12,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , stMenu(new QMenu(this))
+    , stIcon(new QSystemTrayIcon(this))
     , vLayout(new QVBoxLayout(centralWidget()))
     , noteListView(new QListView(this))
     , notelistModel(NoteListModel::instance)
@@ -23,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 {
     ui->setupUi(this);
+
+    setWindowTitle("Flynote");
+    setWindowIcon(QIcon("://icons/note.png"));
+    setAttribute(Qt::WA_DeleteOnClose, false);
+    setAttribute(Qt::WA_QuitOnClose, false);
 
     noteListView->setModel(notelistModel);
 
@@ -36,7 +43,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(QIcon("://icons/send"), "Send", this, SLOT(sendBroadcastNote()));
 
-    /** Network management */
+    /** SystemTrayIcon Init*/
+    stIcon->setToolTip("Flynote");
+    stIcon->setIcon(windowIcon());
+
+    stMenu->addAction("Show", this, SLOT(show()));
+    stMenu->addAction("Quit", qApp, SLOT(quit()), Qt::QueuedConnection);
+    stIcon->setContextMenu(stMenu);
+
+    connect(stIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systemTrayActivated(QSystemTrayIcon::ActivationReason)));
+    stIcon->show();
+    /** SystemTrayIcon Ok */
+
+    /** Network management Init */
     // Test broadcast with 'nc -u 192.168.0.255 45454
 #ifdef _WIN32
     // Add in a combobox all real broadcast address to avoid the use of QHostAddress::Broadcast in Windows
@@ -58,9 +77,8 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
     udpReceiver->bind(broadcast_port, QUdpSocket::ShareAddress);
     connect(udpReceiver, SIGNAL(readyRead()), this, SLOT(receiveBroadcastNote()));
+    /** Network management Ok */
 
-    setWindowTitle("FlyNote");
-    setWindowIcon(QIcon("://icons/note.png"));
     resize(300, 350);
 }
 
@@ -74,6 +92,9 @@ MainWindow::~MainWindow()
     delete udpReceiver;
     delete noteListView;
     delete vLayout;
+
+    delete stMenu;
+    delete stIcon;
 }
 
 void MainWindow::editNote()
@@ -131,5 +152,20 @@ void MainWindow::receiveBroadcastNote()
         QJsonObject json_note = note_doc.object();
         json_note.insert("received", QString("lan"));
         notelistModel->insertJsonNote(notelistModel->rowCount(), json_note);
+
+        // Notification
+#if QT_VERSION > QT_VERSION_CHECK(5, 9, 0)
+        stIcon->showMessage("Flynote", "You receive a note", windowIcon(), 5000);
+#else
+        stIcon->showMessage("Flynote", "You receive a note", QSystemTrayIcon::Information, 5000);
+#endif
     }
 }
+
+void MainWindow::systemTrayActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if (reason == QSystemTrayIcon::DoubleClick){
+        show();
+    }
+}
+

@@ -185,12 +185,16 @@ QJsonObject NoteListModel::jsonNote(int index) const
 
 void NoteListModel::saveNotes(bool leaveprogram)
 {
-    // When leave, remove address
     if (leaveprogram){
+        // When leave, remove address and close opened notes
         for (QJsonValueRef val : noteArray){
             QJsonObject note = val.toObject();
-            note.remove("address");
-            val = note;
+            if (note.contains("address")){
+                qintptr ptr = note.value("address").toString().toInt(nullptr, 16);
+                delete reinterpret_cast<FlyNote*>(ptr);
+                note.remove("address");
+                val = note;
+            }
         }
     }
     QJsonDocument saveDoc(noteArray);

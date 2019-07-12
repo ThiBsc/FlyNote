@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QUdpSocket>
 #include <QComboBox>
+#include <QSystemTrayIcon>
 
 #include "flynote.h"
 #include "notelistmodel.h"
@@ -27,9 +28,12 @@ public slots:
     void deleteNote();
     void sendBroadcastNote();
     void receiveBroadcastNote();
+    void systemTrayActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     Ui::MainWindow *ui;
+    QMenu *stMenu;
+    QSystemTrayIcon *stIcon;
 
     const quint16 broadcast_port = 45454;
     QVBoxLayout *vLayout;
