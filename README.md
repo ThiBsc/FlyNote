@@ -27,6 +27,17 @@ qmake ../flynote.pro
 make
 ```
 
+## Network test
+
+If you want to test the broadcast receiver, start FlyNote, start a shell and write:
+```bash
+nc -u 192.168.0.255 45454
+some
+text
+```
+You will see lines add to the list
+
 ## Icons
+
 Note, add, delete, edit and send icon made by [Freepik](https://www.freepik.com/) from [Flaticon](www.flaticon.com)  
 broadcast icon made by [smallikeart](https://www.flaticon.com/authors/smalllikeart) from [Flaticon](www.flaticon.com)  

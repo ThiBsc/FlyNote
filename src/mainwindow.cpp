@@ -129,7 +129,7 @@ void MainWindow::receiveBroadcastNote()
         // Create the note from the data
         QJsonDocument note_doc = QJsonDocument::fromJson(datagram_note);
         QJsonObject json_note = note_doc.object();
-        json_note.insert("received", "lan");
+        json_note.insert("received", QString("lan"));
         notelistModel->insertJsonNote(notelistModel->rowCount(), json_note);
     }
 }
