@@ -8,15 +8,14 @@ A program to take note on desktop like a Post-It and share on LAN.
 
 ## Features
 
-* [X] Open a new flying note
-* [x] Change the color manually
-* [x] Close the note
-* [x] Edit the note title (enter in edition with double click)
-* [x] Resize the note
-* [x] Share a note on LAN
-* [x] Manage the list of notes
+* [x] Change the color
+* [x] Add/Delete note
+* [ ] Reorder the list
+* [x] Edit the note title
 * [x] Save the list of notes
-* [x] Manage transparency when the flynote loose the focus
+* [x] Share a note on LAN
+* [ ] Send to one user
+* [ ] Receive notification
 
 ## Compile
 
