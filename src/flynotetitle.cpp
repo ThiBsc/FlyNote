@@ -2,6 +2,7 @@
 #include "flynote.h"
 #include "flynotebutton.h"
 #include "colorpicker.h"
+#include "notelistmodel.h"
 
 #include <QMouseEvent>
 
@@ -68,6 +69,7 @@ QString FlyNoteTitle::getTitle() const
 void FlyNoteTitle::openNewNote()
 {
     FlyNote *f = new FlyNote(ColorPicker::getRandomColor(), "New note", "");
+    NoteListModel::instance->insertNote(NoteListModel::instance->rowCount(), f);
     f->show();
 }
 
