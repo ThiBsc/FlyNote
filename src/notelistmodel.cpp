@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QIcon>
+#include <QDir>
 
 #include <sstream>
 
@@ -198,7 +199,12 @@ void NoteListModel::saveNotes(bool leaveprogram)
         }
     }
     QJsonDocument saveDoc(noteArray);
-    QFile saveFile("notes.json");
+    QString path = QString("%1/%2").arg(QDir::homePath(), ".flynote");
+    QDir dir(path);
+    if (!dir.exists()){
+        dir.mkpath(path);
+    }
+    QFile saveFile(QString("%1/flynote.json").arg(path));
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
     } else {
@@ -209,7 +215,8 @@ void NoteListModel::saveNotes(bool leaveprogram)
 
 void NoteListModel::readNotes()
 {
-    QFile file("notes.json");
+    QString file_path = QString("%1/%2/flynote.json").arg(QDir::homePath(), ".flynote");
+    QFile file(file_path);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
     } else {

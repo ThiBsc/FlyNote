@@ -9,7 +9,6 @@ int main(int argc, char *argv[])
     a.setQuitOnLastWindowClosed(false);
 
     NoteListModel::instance->readNotes();
-
     MainWindow w;
     w.show();
 
