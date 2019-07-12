@@ -154,7 +154,7 @@ void MainWindow::receiveBroadcastNote()
         notelistModel->insertJsonNote(notelistModel->rowCount(), json_note);
 
         // Notification
-#if QT_VERSION > QT_VERSION_CHECK(5, 9, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
         stIcon->showMessage("Flynote", "You receive a note", windowIcon(), 5000);
 #else
         stIcon->showMessage("Flynote", "You receive a note", QSystemTrayIcon::Information, 5000);
