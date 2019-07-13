@@ -86,7 +86,7 @@ bool NoteListModel::setData(const QModelIndex &index, const QVariant &value, int
     if (data(index, role) != value && role == Qt::EditRole) {
         QJsonObject jsonNote = noteArray.at(index.row()).toObject();
         if (jsonNote.contains("address")){
-            qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            quintptr ptr = jsonNote.value("address").toString().toULong(nullptr, 16);
             auto fnote = reinterpret_cast<FlyNote*>(ptr);
             fnote->setTitle(value.toString());
             jsonNote["title"] = fnote->getTitle();
@@ -191,7 +191,7 @@ void NoteListModel::saveNotes(bool leaveprogram)
         for (QJsonValueRef val : noteArray){
             QJsonObject note = val.toObject();
             if (note.contains("address")){
-                qintptr ptr = note.value("address").toString().toInt(nullptr, 16);
+                quintptr ptr = note.value("address").toString().toULong(nullptr, 16);
                 delete reinterpret_cast<FlyNote*>(ptr);
                 note.remove("address");
                 val = note;
@@ -246,7 +246,7 @@ void NoteListModel::editNote(const QModelIndex &noteindex)
         QJsonObject jsonNote = noteArray.at(noteindex.row()).toObject();
         if (jsonNote.contains("address")){
             // do nothing;
-            //qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            //quintptr ptr = jsonNote.value("address").toString().toULong(nullptr, 16);
             //reinterpret_cast<FlyNote*>(ptr)->setFocus(Qt::FocusReason::MouseFocusReason);
         } else {
             FlyNote *newNote = new FlyNote(QColor(jsonNote.value("color").toString()), jsonNote.value("title").toString(), jsonNote.value("content").toString());
@@ -260,13 +260,13 @@ void NoteListModel::editNote(const QModelIndex &noteindex)
         }
     }
 }
-
+#include <QDebug>
 void NoteListModel::deleteNote(const QModelIndex &noteindex)
 {
     if (noteindex.isValid()){
         QJsonObject jsonNote = noteArray.at(noteindex.row()).toObject();
         if (jsonNote.contains("address")){
-            qintptr ptr = jsonNote.value("address").toString().toInt(nullptr, 16);
+            quintptr ptr = jsonNote.value("address").toString().toULong(nullptr, 16);
             delete reinterpret_cast<FlyNote*>(ptr);
         }
         removeNote(noteindex.row());
