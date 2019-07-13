@@ -86,6 +86,7 @@ bool NoteListModel::setData(const QModelIndex &index, const QVariant &value, int
     if (data(index, role) != value && role == Qt::EditRole) {
         QJsonObject jsonNote = noteArray.at(index.row()).toObject();
         if (jsonNote.contains("address")){
+            // In 64b, we need toULong conversion
             quintptr ptr = jsonNote.value("address").toString().toULong(nullptr, 16);
             auto fnote = reinterpret_cast<FlyNote*>(ptr);
             fnote->setTitle(value.toString());
