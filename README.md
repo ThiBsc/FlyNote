@@ -23,7 +23,7 @@ A program to take note on desktop like a Post-It and share on LAN.
 # require qt5-default
 mkdir build
 cd build
-qmake ../flynote.pro
+qmake -config release ../flynote.pro
 make
 ```
 
