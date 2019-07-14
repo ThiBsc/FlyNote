@@ -52,7 +52,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
             ret = data(index, Qt::DisplayRole);
         } else if (role == Qt::DecorationRole){
             if (noteArray.at(index.row()).toObject().contains("received")){
-                ret = QIcon("://icons/broadcast");
+                ret = QIcon(QString("://icons/%1").arg(noteArray.at(index.row()).toObject().value("received").toString()));
             }
         } else if (role == Qt::BackgroundRole){
             QColor color(noteArray.at(index.row()).toObject().value("color").toString());

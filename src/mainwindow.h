@@ -7,6 +7,7 @@
 #include <QUdpSocket>
 #include <QComboBox>
 #include <QSystemTrayIcon>
+#include <QToolButton>
 
 #include "flynote.h"
 #include "notelistmodel.h"
@@ -22,13 +23,20 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void showSystemTrayMessage(const QString &title, const QString &message, int msecs = 10000);
 
 public slots:
+    void addUser(const QString &user, const QHostAddress &address);
+    void deleteUser(const QString &user, const QHostAddress &address);
     void editNote();
     void deleteNote();
-    void sendBroadcastNote();
-    void receiveBroadcastNote();
+    void sendNoteToUser(QAction *action);
+    void sendNoteToBroadcast();
+    void receiveData();
     void systemTrayActivated(QSystemTrayIcon::ActivationReason reason);
+#ifdef _WIN32
+   void changeWindowsNetwork(const QString &network);
+#endif
 
 private:
     Ui::MainWindow *ui;
@@ -39,10 +47,13 @@ private:
     QVBoxLayout *vLayout;
     QListView *noteListView;
     NoteListModel *notelistModel;
+    QMenu *usersMenu;
+    QToolButton *usersButton;
     QUdpSocket *udpSender, *udpReceiver;
-    bool volatile sendedByMe;
+    ushort volatile sendedByMe;
 #ifdef _WIN32
     QComboBox *networkCbx;
+    QHostAddress broadcastAddress;
 #endif
 
 };

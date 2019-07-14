@@ -6,5 +6,6 @@
         <file>icons/delete.png</file>
         <file>icons/send.png</file>
         <file>icons/broadcast.png</file>
+        <file>icons/user.png</file>
     </qresource>
 </RCC>
