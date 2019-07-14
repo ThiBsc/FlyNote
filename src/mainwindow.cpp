@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     usersButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     usersButton->setPopupMode(QToolButton::InstantPopup);
     usersButton->setIcon(QIcon("://icons/send"));
+    usersButton->setToolTip("Send");
     usersButton->setMenu(usersMenu);
     usersButton->setEnabled(false);
     connect(usersMenu, SIGNAL(triggered(QAction*)), this, SLOT(sendNoteToUser(QAction*)));
