@@ -32,9 +32,10 @@ public slots:
     void deleteNote();
     void sendNoteToUser(QAction *action);
     void sendNoteToBroadcast();
+    void writeDatagramToBroadcast(const QByteArray &datagram);
     void receiveData();
     void systemTrayActivated(QSystemTrayIcon::ActivationReason reason);
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
    void changeWindowsNetwork(const QString &network);
 #endif
 
@@ -51,7 +52,7 @@ private:
     QToolButton *usersButton;
     QUdpSocket *udpSender, *udpReceiver;
     ushort volatile sendedByMe;
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
     QComboBox *networkCbx;
     QHostAddress broadcastAddress;
 #endif

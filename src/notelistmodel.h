@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QJsonDocument>
 
 class FlyNote;
 
@@ -23,6 +24,14 @@ public:
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+    // Drag & Drop:
+    /** https://doc.qt.io/qt-5/model-view-programming.html#using-drag-and-drop-with-item-views */
+    bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    QStringList mimeTypes() const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    Qt::DropActions supportedDropActions() const override;
+    void moveRow(int originRow, int destRow);
     // Manage data:
     void insertJsonNote(int row, QJsonObject note);
     void insertNote(int row, FlyNote *note);

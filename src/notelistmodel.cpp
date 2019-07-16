@@ -3,9 +3,9 @@
 #include "colorpicker.h"
 
 #include <QFile>
-#include <QJsonDocument>
 #include <QIcon>
 #include <QDir>
+#include <QMimeData>
 
 #include <sstream>
 
@@ -103,13 +103,87 @@ bool NoteListModel::setData(const QModelIndex &index, const QVariant &value, int
 
 Qt::ItemFlags NoteListModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags iflags;
+    Qt::ItemFlags iflags = QAbstractListModel::flags(index);
     if (index.isValid()){
-        iflags = (Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
-    } else {
-        iflags = Qt::NoItemFlags;
+        iflags |= (Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
     }
     return iflags;
+}
+#include <QDebug>
+bool NoteListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
+{
+    Q_UNUSED(action);
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+    Q_UNUSED(parent);
+    bool ret = data->hasFormat("application/flynote_json");
+    return ret;
+}
+
+bool NoteListModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    bool ret = false;
+    if (canDropMimeData(data, action, row, column, parent)){
+        int destRow;
+        if (row != -1){
+            destRow = row;
+        } else if (parent.isValid()){
+            destRow = parent.row();
+        } else {
+            destRow = rowCount();
+        }
+        QByteArray encodedNote = data->data("application/flynote_json");
+        QByteArray encodedOriginRow = data->data("origin_row");
+        QJsonObject jobj = QJsonDocument::fromJson(encodedNote).object();
+        // move encodedOriginRow to destRow
+        moveRow(encodedOriginRow.toInt(), destRow);
+    }
+    return ret;
+}
+
+QStringList NoteListModel::mimeTypes() const
+{
+    QStringList mimes;
+    mimes << "application/flynote_json" << "origin_row";
+    return mimes;
+}
+
+QMimeData *NoteListModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *ret = nullptr;
+    if (indexes.size() == 1){
+        QModelIndex mi = indexes.first();
+        if (mi.isValid()){
+            /** Doesn't work, I don't know why
+             * qRegisterMetaType<QJsonValue>("QJsonValue");
+             * qRegisterMetaTypeStreamOperators<QJsonValue>("QJsonValue");
+             *
+             * QDataStream &operator<<(QDataStream &out, const QJsonValue &myObj){ ... }
+             * QDataStream &operator>>(QDataStream &in, QJsonValue &myObj){ ... }
+             * ret = QAbstractListModel::mimeData(indexes);
+             */
+            ret = new QMimeData();
+            QJsonDocument json_mime(jsonNote(mi.row()));
+            ret->setData("application/flynote_json", json_mime.toJson());
+            ret->setData("origin_row", QString::number(mi.row()).toUtf8());
+        }
+    }
+    return ret;
+}
+
+Qt::DropActions NoteListModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}
+
+void NoteListModel::moveRow(int originRow, int destRow)
+{
+    beginRemoveRows(QModelIndex(), originRow, originRow);
+    QJsonValue v_at = noteArray.takeAt(originRow);
+    endRemoveRows();
+    beginInsertRows(QModelIndex(), destRow, destRow);
+    noteArray.insert(destRow, v_at);
+    endInsertRows();
 }
 
 void NoteListModel::insertJsonNote(int row, QJsonObject note)

@@ -4,7 +4,7 @@
 #include <QJsonDocument>
 #include <QHostInfo>
 
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
 // Manage the QHostAddress::Broadcast problem on windows
 #include <QNetworkInterface>
 #include <QNetworkConfigurationManager>
@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     , udpSender(new QUdpSocket(this))
     , udpReceiver(new QUdpSocket(this))
     , sendedByMe(0)
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
     , networkCbx(new QComboBox(this))
 #endif
 {
@@ -35,6 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
     setAttribute(Qt::WA_QuitOnClose, false);
 
     noteListView->setModel(notelistModel);
+    noteListView->setDragEnabled(true);
+    noteListView->setAcceptDrops(true);
+    noteListView->setDropIndicatorShown(true);
+    noteListView->setDragDropMode(QListView::DragDropMode::InternalMove);
 
     vLayout->setContentsMargins(QMargins());
     vLayout->addWidget(noteListView);
@@ -71,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Test broadcast with 'ncat -u 192.168.0.255 45454
     const QString localHostName = QHostInfo::localHostName();
     ui->statusBar->showMessage(QString("Identified as %1").arg(localHostName));
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
     // Add in a combobox all real broadcast address to avoid the use of QHostAddress::Broadcast in Windows
     ui->mainToolBar->addWidget(networkCbx);
     //networkCbx->setEditable(true);
@@ -95,11 +99,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(udpReceiver, SIGNAL(readyRead()), this, SLOT(receiveData()));
     // Notify all users of my connection
     sendedByMe = 1;
-#ifdef __linux__
-    udpSender->writeDatagram(QString("user_join:%1").arg(localHostName).toUtf8(), QHostAddress::Broadcast, broadcast_port);
-#else
-    udpSender->writeDatagram(QString("user_join:%1").arg(localHostName).toUtf8(), QHostAddress(networkCbx->currentText()), broadcast_port);
-#endif
+    writeDatagramToBroadcast(QString("user_join:%1").arg(localHostName).toUtf8());
     /** Network management Ok */
 
     resize(300, 350);
@@ -108,15 +108,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     sendedByMe = 1;
-#ifdef __linux__
-    udpSender->writeDatagram(QString("user_left:%1").arg(QHostInfo::localHostName()).toUtf8(), QHostAddress::Broadcast, broadcast_port);
-#else
-    udpSender->writeDatagram(QString("user_left:%1").arg(QHostInfo::localHostName()).toUtf8(), QHostAddress(networkCbx->currentText()), broadcast_port);
-#endif
+    writeDatagramToBroadcast(QString("user_left:%1").arg(QHostInfo::localHostName()).toUtf8());
     udpSender->waitForBytesWritten(1000);
 
     delete ui;
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
     delete networkCbx;
 #endif
     delete usersMenu;
@@ -209,12 +205,17 @@ void MainWindow::sendNoteToBroadcast()
         datagram_note.prepend("note:");
         qDebug() << "Send to broadcast" << datagram_note;
         sendedByMe = 1;
-#ifdef __linux__
-        udpSender->writeDatagram(datagram_note, QHostAddress::Broadcast, broadcast_port);
-#else
-        udpSender->writeDatagram(datagram_note, QHostAddress(networkCbx->currentText()), broadcast_port);
-#endif
+        writeDatagramToBroadcast(datagram_note);
     }
+}
+
+void MainWindow::writeDatagramToBroadcast(const QByteArray &datagram)
+{
+#ifdef __linux__
+    udpSender->writeDatagram(datagram, QHostAddress::Broadcast, broadcast_port);
+#else
+    udpSender->writeDatagram(datagram, QHostAddress(networkCbx->currentText()), broadcast_port);
+#endif
 }
 
 /**
@@ -268,7 +269,7 @@ void MainWindow::systemTrayActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-#ifdef _WIN32
+#if defined (_WIN32) || defined (_WIN64)
 void MainWindow::changeWindowsNetwork(const QString &network)
 {
     sendedByMe = 2;
