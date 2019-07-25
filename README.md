@@ -1,6 +1,6 @@
 # FlyNote :pencil2:
 [![Build Status](https://travis-ci.org/ThiBsc/FlyNote.svg?branch=master)](https://travis-ci.org/ThiBsc/FlyNote)
-[![AUR-GIT](https://img.shields.io/aur/version/flynote-git.svg?color=lightskyblue)](https://aur.archlinux.org/packages/flynote-git/)
+[![AUR-GIT](https://img.shields.io/aur/version/flynote-git.svg?color=steelblue&label=aur-git)](https://aur.archlinux.org/packages/flynote-git/)
 [![License: MIT](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0)
 
 A program to take note on desktop like a Post-It and share on LAN.
@@ -9,14 +9,13 @@ A program to take note on desktop like a Post-It and share on LAN.
 
 ## Features
 
-* [x] Change the color
-* [x] Add/Delete note
-* [x] Edit the note title
+* [x] Add/Delete/Edit note
 * [x] Save the list of notes
 * [x] Share a note on LAN
 * [x] Send to one user
-* [ ] Sender's identity
+* [x] Sender's identity
 * [x] Receive notification
+* [ ] Markdown Editor
 
 ## Compile
 
@@ -37,7 +36,7 @@ ncat -u 192.168.0.255 45454
 user_join:toto
 user_left:toto
 # test broadcast note
-note:{"title":"ncat note", "color":"lightblue", "content":"hello world!"}
+note:{"title":"ncat note", "color":"lightblue", "content":"hello world!", "from":"ncat"}
 ```
 If you have some trouble with windows, check your firewall.
 

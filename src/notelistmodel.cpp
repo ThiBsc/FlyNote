@@ -40,22 +40,27 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
     if (index.isValid()){
+        QJsonObject obj = noteArray.at(index.row()).toObject();
         if (role == Qt::DisplayRole){
-            ret = noteArray.at(index.row()).toObject().value("title");
+            ret = obj.value("title");
         } else if (role == Qt::ToolTipRole){
-            QString content = noteArray.at(index.row()).toObject().value("content").toString();
+            QString content = obj.value("content").toString();
             if (content.length() > 40){
                 content = content.left(37).leftJustified(40, '.');
             }
-            ret = QString("<b>%1</b><br>%2").arg(data(index, Qt::DisplayRole).toString(), content);
+            QString from;
+            if (obj.contains("from")){
+                from = QString(" (from %1)").arg(obj.value("from").toString());
+            }
+            ret = QString("<b>%1</b>%2<br>%3").arg(obj.value("title").toString(), from, content);
         } else if (role == Qt::EditRole){
             ret = data(index, Qt::DisplayRole);
         } else if (role == Qt::DecorationRole){
-            if (noteArray.at(index.row()).toObject().contains("received")){
-                ret = QIcon(QString("://icons/%1").arg(noteArray.at(index.row()).toObject().value("received").toString()));
+            if (obj.contains("received")){
+                ret = QIcon(QString("://icons/%1").arg(obj.value("received").toString()));
             }
         } else if (role == Qt::BackgroundRole){
-            QColor color(noteArray.at(index.row()).toObject().value("color").toString());
+            QColor color(obj.value("color").toString());
 
             QLinearGradient grad(QPointF(0, 0), QPointF(1, 0));
             grad.setCoordinateMode(QGradient::CoordinateMode::ObjectBoundingMode);
@@ -72,7 +77,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
             QFont font("Courier");
             ret = font;
         } else if (role == Qt::ForegroundRole){
-            ret = (noteArray.at(index.row()).toObject().contains("address") ? QColor(Qt::black) : QColor(Qt::gray));
+            ret = (obj.contains("address") ? QColor(Qt::black) : QColor(Qt::gray));
         } else {
             // do nothing;
         }

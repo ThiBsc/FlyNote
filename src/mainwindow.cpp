@@ -176,6 +176,7 @@ void MainWindow::sendNoteToUser(QAction *action)
         // get the note to broadcast
         QJsonObject json_note = notelistModel->jsonNote(current_note.row());
         json_note.insert("received", QString("user"));
+        json_note.insert("from", QHostInfo::localHostName());
         json_note.remove("address");
         QJsonDocument doc(json_note);
 
@@ -198,6 +199,7 @@ void MainWindow::sendNoteToBroadcast()
         // get the note to broadcast
         QJsonObject json_note = notelistModel->jsonNote(current_note.row());
         json_note.insert("received", QString("broadcast"));
+        json_note.insert("from", QHostInfo::localHostName());
         json_note.remove("address");
         QJsonDocument doc(json_note);
 
