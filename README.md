@@ -1,6 +1,6 @@
 # FlyNote :pencil2:
 [![Build Status](https://travis-ci.org/ThiBsc/FlyNote.svg?branch=master)](https://travis-ci.org/ThiBsc/FlyNote)
-[![AUR-GIT](https://img.shields.io/aur/version/flynote-git.svg?color=steelblue&label=aur-git)](https://aur.archlinux.org/packages/flynote-git/)
+[![AUR-GIT](https://img.shields.io/aur/version/flynote-git.svg?color=3fbaec&label=aur-git)](https://aur.archlinux.org/packages/flynote-git/)
 [![License: MIT](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0)
 
 A program to take note on desktop like a Post-It and share on LAN.
