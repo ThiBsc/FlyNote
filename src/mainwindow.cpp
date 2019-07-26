@@ -96,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
     networkCbx->addItems(broadcast_set.toList());
-    networkCbx->setCurrentText("127.0.0.1");
     broadcastAddress = QHostAddress(networkCbx->currentText());
     connect(networkCbx, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(changeWindowsNetwork(const QString&)));
 #endif
