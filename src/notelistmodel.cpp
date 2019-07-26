@@ -2,7 +2,7 @@
 #include "flynote.h"
 #include "colorpicker.h"
 
-#include <QFile>
+#include <QSaveFile>
 #include <QIcon>
 #include <QDir>
 #include <QMimeData>
@@ -266,9 +266,10 @@ QJsonObject NoteListModel::jsonNote(int index) const
 
 void NoteListModel::saveNotes(bool leaveprogram)
 {
+    QJsonArray array = noteArray;
     if (leaveprogram){
-        // When leave, remove address and close opened notes
-        for (QJsonValueRef val : noteArray){
+        // When leave, close opened notes
+        for (QJsonValueRef val : array){
             QJsonObject note = val.toObject();
             if (note.contains("address")){
                 quintptr ptr = note.value("address").toString().toULong(nullptr, 16);
@@ -278,18 +279,30 @@ void NoteListModel::saveNotes(bool leaveprogram)
             }
         }
     }
-    QJsonDocument saveDoc(noteArray);
+    // When save, remove address
+    for (QJsonValueRef val : array){
+        QJsonObject note = val.toObject();
+        if (note.contains("address")){
+            note.remove("address");
+            val = note;
+        }
+    }
+    QJsonDocument saveDoc(array);
     QString path = QString("%1/%2").arg(QDir::homePath(), ".flynote");
     QDir dir(path);
     if (!dir.exists()){
         dir.mkpath(path);
     }
-    QFile saveFile(QString("%1/flynote.json").arg(path));
+    QSaveFile saveFile(QString("%1/flynote.json").arg(path));
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
     } else {
         saveFile.write(saveDoc.toJson());
-        saveFile.close();
+        if (saveFile.commit()){
+            // do nothing;
+        } else {
+            qWarning("Fail to save the file.");
+        }
     }
 }
 
@@ -306,6 +319,21 @@ void NoteListModel::readNotes()
         beginResetModel();
         noteArray = loadNotes.array();
         endResetModel();
+    }
+}
+
+void NoteListModel::saveOnModelMove()
+{
+    saveNotes(false);
+}
+
+void NoteListModel::saveOnModelMove(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
+{
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
+    if (!roles.contains(Qt::ForegroundRole)){
+        // Save only if we realy change the data
+        saveNotes(false);
     }
 }
 
@@ -340,7 +368,7 @@ void NoteListModel::editNote(const QModelIndex &noteindex)
         }
     }
 }
-#include <QDebug>
+
 void NoteListModel::deleteNote(const QModelIndex &noteindex)
 {
     if (noteindex.isValid()){

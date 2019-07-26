@@ -44,6 +44,8 @@ public:
     void readNotes();
 
 public slots:
+    void saveOnModelMove();
+    void saveOnModelMove(const QModelIndex &topLeft, const QModelIndex &bottomRight,  const QVector<int> &roles);
     void addNote();
     void editNote(const QModelIndex &noteindex);
     void deleteNote(const QModelIndex &noteindex);
