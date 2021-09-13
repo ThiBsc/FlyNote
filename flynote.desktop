@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Flynote
+Comment=Take note on your desktop
+Exec=/usr/bin/flynote
+Icon=/usr/share/icons/hicolor/64x64/apps/note.png
+Categories=Office;Utility;
+Terminal=false
+StartupNotify=true
+
